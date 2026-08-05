@@ -1,33 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Alerta de Faltas Escolares!</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Alerta de Faltas Escolares</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    
-</body>
 
-<header class="main-header">
-    <div class="header-content">
-      <div class="logo-area">
-        <div class="badge-logo">
-          <div class="badge-inner">
-            <span class="badge-title">ASN</span>
-          </div>
-        </div>
-        <h1>Sistema de Alerta<br><span>de Faltas Escolares</span></h1>
+  <header class="header-container">
+    <div class="yellow-wave"></div>
+
+    <div class="header-banner">
+      
+      <div class="watermarks">
+        <i data-lucide="mail"></i>
+        <i data-lucide="bell"></i>
+        <i data-lucide="file-text"></i>
+        <i data-lucide="users"></i>
       </div>
+
+      <div class="header-title-area">
+        <h1>
+          <span>Sistema de Alerta</span>
+          <strong class="highlight">de Faltas Escolares</strong>
+        </h1>
+      </div>
+
+      <div class="header-logo-area">
+        <img src="img/brasao.png" alt="Brasão da Escola" class="school-badge" />
+      </div>
+
     </div>
   </header>
 
-  <main class="container">
-    <section class="card">
-      
-      <div class="card-header">
-        <i data-lucide="sliders-horizontal" class="icon-title"></i>
-        <h2>LISTA DE ALUNOS ACIMA DO LIMITE</h2>
-      </div>
+  <script>
+    // Inicializa os ícones do Lucide
+    lucide.createIcons();
+  </script>
+</body>
 </html>
-
