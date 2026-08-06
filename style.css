@@ -10,13 +10,32 @@ body {
   background-color: #f8fafc;
 }
 
-/* Container do Cabeçalho */
-.header-container {
-  position: relative;
-  width: 95%;
-  padding-bottom: 20px;
-  overflow: hidden;
-  border-top: 50px;
+.header-container{
+    position: relative;
+    width:95%;
+    overflow:hidden;
+}
+
+.header-banner {
+    position: relative;
+    background: linear-gradient(100deg,#0d3293,#173fae);
+    border-top-right-radius: 28px;
+    overflow: hidden;
+}
+
+.header-banner::after{
+    content:"";
+    position:absolute;
+    top:-40px;
+    right:-80px;
+
+    width:450px;
+    height:180px;
+
+    background:#facc15;
+
+    border-bottom-left-radius:100%;
+    z-index:-1;
 }
 
 /* Faixa/Curva Amarela de Fundo */
@@ -31,22 +50,6 @@ body {
   z-index: 1;
 }
 
-/* Banner Principal Azul */
-.header-banner {
-  position: relative;
-  z-index: 2;
-  background: linear-gradient(100deg, #0d3293 0%, #173fae 100%);
-  color: #ffffff;
-  padding: 24px 60px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  
-  /* Cria o corte ondulado na borda inferior/direita */
-  clip-path: ellipse(85% 95% at 45% 0%);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  min-height: 130px;
-}
 
 /* Título e Texto */
 .header-title-area h1 {
@@ -67,13 +70,6 @@ body {
   font-weight: 800;
   color: #facc15; /* Amarelo do destaque */
   letter-spacing: -0.5px;
-}
-
-/* Estilo do Brasão / Logo */
-.header-logo-area {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .school-badge {
