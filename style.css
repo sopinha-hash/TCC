@@ -1,4 +1,11 @@
-.header {
-  width: 1024px;
-  height: auto;
+/* Remove margens padrão do navegador */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Garante que o banner ocupe a largura total no topo */
+.banner-topo img {
+position: absolute; /* Ou 'fixed' se quiser que ela acompanhe o scroll */
+top: 50%;
 }
