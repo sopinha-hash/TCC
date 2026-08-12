@@ -1,0 +1,518 @@
+/* =========================================================
+   SISTEMA DE ALERTA DE FALTAS ESCOLARES
+   ESTILOS GLOBAIS
+   ========================================================= */
+
+
+
+
+/* =========================================================
+   1. VARIÁVEIS DO SISTEMA
+   ========================================================= */
+
+
+:root {
+    /* Cores institucionais */
+    --azul-principal: #0645ad;
+    --azul-escuro: #003b91;
+    --azul-medio: #145dcc;
+    --azul-claro: #eaf2ff;
+
+
+    --amarelo: #ffc400;
+    --amarelo-claro: #fff4cc;
+
+
+    /* Cores neutras */
+    --branco: #ffffff;
+    --cinza-50: #fafbfc;
+    --cinza-100: #f4f6f8;
+    --cinza-200: #e5e9ef;
+    --cinza-300: #d3d9e2;
+    --cinza-500: #7b8491;
+    --cinza-700: #3d4652;
+    --cinza-900: #17202a;
+
+
+    /* Estados */
+    --verde: #24a148;
+    --verde-claro: #eaf8ee;
+
+
+    --vermelho: #dc2626;
+    --vermelho-claro: #fff0f0;
+
+
+    --laranja: #e88a00;
+    --laranja-claro: #fff5e5;
+
+
+    /* Tipografia */
+    --fonte-principal: "Segoe UI", Arial, Helvetica, sans-serif;
+
+
+    /* Bordas */
+    --raio-pequeno: 6px;
+    --raio-medio: 10px;
+    --raio-grande: 14px;
+
+
+    /* Sombras */
+    --sombra-leve: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --sombra-media: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+
+    /* Transições */
+    --transicao: 0.2s ease;
+}
+
+
+
+
+/* =========================================================
+   2. RESET
+   ========================================================= */
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+
+/* =========================================================
+   3. HTML E BODY
+   ========================================================= */
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+    min-height: 100vh;
+    font-family: var(--fonte-principal);
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--cinza-900);
+    background-color: var(--cinza-50);
+}
+
+
+
+
+/* =========================================================
+   4. ELEMENTOS BÁSICOS
+   ========================================================= */
+
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+
+button {
+    border: none;
+    cursor: pointer;
+}
+
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+
+ul,
+ol {
+    list-style: none;
+}
+
+
+
+
+/* =========================================================
+   5. CONTAINER GLOBAL
+   ========================================================= */
+
+
+.container {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 32px;
+}
+
+
+
+
+/* =========================================================
+   6. BOTÕES GLOBAIS
+   ========================================================= */
+
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+
+    min-height: 44px;
+    padding: 10px 20px;
+
+
+    border-radius: var(--raio-medio);
+
+
+    font-size: 15px;
+    font-weight: 600;
+
+
+    transition:
+        background-color var(--transicao),
+        border-color var(--transicao),
+        color var(--transicao),
+        transform var(--transicao),
+        box-shadow var(--transicao);
+}
+
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+
+.btn:active {
+    transform: translateY(0);
+}
+
+
+
+
+/* Botão azul */
+
+
+.btn-primary {
+    color: var(--branco);
+    background-color: var(--azul-principal);
+}
+
+
+.btn-primary:hover {
+    background-color: var(--azul-escuro);
+}
+
+
+
+
+/* Botão verde */
+
+
+.btn-success {
+    color: var(--branco);
+    background-color: var(--verde);
+}
+
+
+.btn-success:hover {
+    background-color: #1d8c3d;
+}
+
+
+
+
+/* Botão vermelho */
+
+
+.btn-danger {
+    color: var(--branco);
+    background-color: var(--vermelho);
+}
+
+
+.btn-danger:hover {
+    background-color: #b91c1c;
+}
+
+
+
+
+/* Botão secundário */
+
+
+.btn-secondary {
+    color: var(--azul-principal);
+    background-color: var(--branco);
+    border: 1px solid var(--cinza-300);
+}
+
+
+.btn-secondary:hover {
+    background-color: var(--azul-claro);
+    border-color: var(--azul-principal);
+}
+
+
+
+
+/* =========================================================
+   7. CAMPOS DE FORMULÁRIO
+   ========================================================= */
+
+
+.form-control {
+    width: 100%;
+    min-height: 44px;
+
+
+    padding: 10px 14px;
+
+
+    color: var(--cinza-900);
+    background-color: var(--branco);
+
+
+    border: 1px solid var(--cinza-300);
+    border-radius: var(--raio-medio);
+
+
+    outline: none;
+
+
+    transition:
+        border-color var(--transicao),
+        box-shadow var(--transicao);
+}
+
+
+.form-control:focus {
+    border-color: var(--azul-principal);
+    box-shadow: 0 0 0 3px rgba(6, 69, 173, 0.12);
+}
+
+
+
+
+/* =========================================================
+   8. TÍTULOS
+   ========================================================= */
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--azul-escuro);
+    line-height: 1.2;
+}
+
+
+h1 {
+    font-size: 32px;
+}
+
+
+h2 {
+    font-size: 26px;
+}
+
+
+h3 {
+    font-size: 21px;
+}
+
+
+
+
+/* =========================================================
+   9. TEXTO AUXILIAR
+   ========================================================= */
+
+
+.text-muted {
+    color: var(--cinza-500);
+}
+
+
+.text-primary {
+    color: var(--azul-principal);
+}
+
+
+.text-success {
+    color: var(--verde);
+}
+
+
+.text-danger {
+    color: var(--vermelho);
+}
+
+
+.text-warning {
+    color: var(--laranja);
+}
+
+
+
+
+/* =========================================================
+   10. ESTADOS
+   ========================================================= */
+
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+
+    padding: 5px 12px;
+
+
+    border-radius: 999px;
+
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+.status-success {
+    color: #176b31;
+    background-color: var(--verde-claro);
+}
+
+
+.status-warning {
+    color: #965d00;
+    background-color: var(--laranja-claro);
+}
+
+
+.status-danger {
+    color: #a91d1d;
+    background-color: var(--vermelho-claro);
+}
+
+
+
+
+/* =========================================================
+   11. ACESSIBILIDADE
+   ========================================================= */
+
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid rgba(6, 69, 173, 0.35);
+    outline-offset: 2px;
+}
+
+
+
+
+/* =========================================================
+   12. UTILITÁRIOS
+   ========================================================= */
+
+
+.hidden {
+    display: none !important;
+}
+
+
+.flex {
+    display: flex;
+}
+
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.align-center {
+    align-items: center;
+}
+
+
+.justify-center {
+    justify-content: center;
+}
+
+
+.justify-between {
+    justify-content: space-between;
+}
+
+
+
+
+/* =========================================================
+   13. RESPONSIVIDADE GLOBAL
+   ========================================================= */
+
+
+@media (max-width: 900px) {
+    .container {
+        padding: 0 20px;
+    }
+
+
+    h1 {
+        font-size: 28px;
+    }
+
+
+    h2 {
+        font-size: 23px;
+    }
+}
+
+
+@media (max-width: 600px) {
+    body {
+        font-size: 15px;
+    }
+
+
+    .container {
+        padding: 0 16px;
+    }
+
+
+    h1 {
+        font-size: 24px;
+    }
+
+
+    h2 {
+        font-size: 21px;
+    }
+
+
+    .btn {
+        width: 100%;
+    }
+}
