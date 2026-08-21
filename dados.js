@@ -87,5 +87,48 @@ function baixarLista(formato) {
   }
 }
 
+//baixa o pdf
+function gerarPDF() {
+  // Seleciona a tabela diretamente
+  const tabela = document.querySelector('.students-table');
 
+  // Cria um container temporário sem limites de altura/scroll
+  const containerTemp = document.createElement('div');
+  containerTemp.style.padding = '20px';
+  containerTemp.style.background = '#ffffff';
 
+  // Opcional: Adiciona um título ao PDF gerado
+  containerTemp.innerHTML = `
+    <h2 style="font-family: sans-serif; color: #1e3a8a; margin-bottom: 15px;">
+      Lista de Alunos - Faltas Escolares
+    </h2>
+  `;
+
+  // Clona a tabela para não afetar o layout da tela
+  const tabelaClonada = tabela.cloneNode(true);
+  
+  // Garante que a tabela clonada ocupe 100% e não quebre linhas no meio
+  tabelaClonada.style.width = '100%';
+  tabelaClonada.style.borderCollapse = 'collapse';
+  
+  containerTemp.appendChild(tabelaClonada);
+  document.body.appendChild(containerTemp);
+
+  const opcoes = {
+    margin:       [10, 10, 10, 10],
+    filename:     'lista_alunos.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, scrollY: 0 },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+  };
+
+  // Gera o PDF e remove o container temporário em seguida
+  html2pdf()
+    .set(opcoes)
+    .from(containerTemp)
+    .save()
+    .then(() => {
+      document.body.removeChild(containerTemp);
+    });
+}
