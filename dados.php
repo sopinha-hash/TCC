@@ -1,32 +1,51 @@
 <?php
-// MUDAR DEPOIS DE ENVIAR A PARTE DA BIA!!!!!!!!!!
+// MUDAR QUANDO FOR ENVIAR A PARTE DA BIA!!!!!!!!!!
 $alunos = [
-    ["nome" => "Ana Clara Silva Souza", "turma" => "1º A", "faltas" => 18],
-    ["nome" => "Bruno Matheus Lima", "turma" => "1º B", "faltas" => 16],
-    ["nome" => "Carlos Eduardo Pereira", "turma" => "2º A", "faltas" => 15],
-    ["nome" => "Eduarda Fernandes Costa", "turma" => "1º A", "faltas" => 14],
-    ["nome" => "Gabriel Henrique Martins", "turma" => "2º B", "faltas" => 13],
-    ["nome" => "Isabela Victoria Ramos", "turma" => "3º A", "faltas" => 12],
+    ["nome" => "Ana Clara Silva Souza", "turma" => "1º A", "faltas" => 18, "justificadas" => 3],
+    ["nome" => "Bruno Matheus Lima", "turma" => "1º B", "faltas" => 16, "justificadas" => 5],
+    ["nome" => "Carlos Eduardo Pereira", "turma" => "2º A", "faltas" => 15, "justificadas" => 0],
+    ["nome" => "Eduarda Fernandes Costa", "turma" => "1º A", "faltas" => 14, "justificadas" => 2],
+    ["nome" => "Gabriel Henrique Martins", "turma" => "2º B", "faltas" => 13, "justificadas" => 1],
+    ["nome" => "Isabela Victoria Ramos", "turma" => "3º A", "faltas" => 12, "justificadas" => 4],
 ];
 
-// Captura a turma selecionada na URL (ex: index.php?turma=1º A)
-$turma_selecionada = isset($_GET['turma']) ? $_GET['turma'] : '';
+// Captura a turma selecionada na URL
+$turma_selecionada = $_GET['turma'] ?? '';
 
-// Extrai as turmas únicas para preencher o <select>
+// Extrai as turmas únicas para o <select>
 $turmas_disponiveis = array_unique(array_column($alunos, 'turma'));
 
-// Aplica o filtro nos alunos se uma turma foi escolhida
+// Faz a ordenação dos filtros
+$ordenacao = $_GET['ordenacao'] ?? '';
+if ($ordenacao === 'maior_faltas') {
+    usort($alunos, function($a, $b) {
+        return $b['faltas'] <=> $a['faltas'];
+    });
+} elseif ($ordenacao === 'menor_faltas') {
+    usort($alunos, function($a, $b) {
+        return $a['faltas'] <=> $b['faltas'];
+    });
+} elseif ($ordenacao === 'alfabetica') {
+    usort($alunos, function($a, $b) {
+        return strcmp($a['nome'], $b['nome']);
+    });
+}
+
+// Aplica o filtro de turma
 $alunos_filtrados = array_filter($alunos, function($aluno) use ($turma_selecionada) {
-    if ($turma_selecionada === '') return true; // Mostra todos
+    if ($turma_selecionada === '') return true;
     return $aluno['turma'] === $turma_selecionada;
 });
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="dados.css">
+  <link rel="dados.js" href="dados.js">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <title>Sistema de Alerta de Faltas Escolares</title>
 </head>
 
@@ -76,74 +95,73 @@ $alunos_filtrados = array_filter($alunos, function($aluno) use ($turma_seleciona
 
     <!-- Barra de Filtros com Envio Automático -->
     <form method="GET" action="" class="controls-bar">
-      <label class="checkbox-label">
-        <input type="checkbox" id="selectAll">
-        <span>Selecionar todos os alunos</span>
-      </label>
 
-      <div class="filter-group">
-        <div class="search-box">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input type="text" id="input-pesquisa" placeholder="Pesquisar aluno...">
-        </div>
+<div class="search-box">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+  <input type="text" id="input-pesquisa" placeholder="Pesquisar aluno...">
+</div>
 
         <!-- Select Dinâmico de Turmas -->
-        <select class="custom-select" name="turma" onchange="this.form.submit()">
-          <option value="">Todas as turmas</option>
-          <?php foreach ($turmas_disponiveis as $turma): ?>
-            <option value="<?php echo $turma; ?>" <?php echo ($turma_selecionada === $turma) ? 'selected' : ''; ?>>
-              <?php echo $turma; ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
+<select class="custom-select" name="turma" onchange="this.form.submit()">
+  <option value="">Todas as turmas</option>
+    <?php foreach ($turmas_disponiveis as $turma): ?>
+      <option value="<?php echo $turma; ?>" <?php echo ($turma_selecionada === $turma) ? 'selected' : ''; ?>>
+        <?php echo $turma; ?>
+  </option>
+        <?php endforeach; ?>
+</select>
 
-        <select class="custom-select" id="ordem-faltas">
-          <option value="">Ordenar por faltas</option>
-        </select>
+<select class="custom-select" id="ordem-faltas" name="ordenacao" onchange="this.form.submit()">
+      <option value="">Filtros</option>
+      <option value="maior_faltas" <?php echo ($ordenacao === 'maior_faltas') ? 'selected' : ''; ?>>
+        Maior Quantidade 
+      </option>
+      <option value="menor_faltas" <?php echo ($ordenacao === 'menor_faltas') ? 'selected' : ''; ?>>
+        Menor Quantidade
+      </option>
+      <option value="alfabetica" <?php echo ($ordenacao === 'alfabetica') ? 'selected' : ''; ?>>
+        Ordem Alfabética (A-Z)
+      </option>
+    </select>
 
-        <button type="button" class="btn-sort" id="btn-ordem-alfabetica">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <polyline points="19 12 12 19 5 12"></polyline>
-          </svg>
-          A-Z
-        </button>
       </div>
     </form>
 
     <!-- Tabela populada pelo PHP -->
-    <div class="table-container">
-      <table class="students-table">
-        <thead>
+<div class="table-container">
+  <table class="students-table">
+    <thead>
+      <tr>
+        <th width="40"><input type="checkbox" id="check-all-table"></th>
+        <th>Nome do Aluno</th>
+        <th>Turma</th>
+      <div class="students-center">
+        <th class="text-center">Total de Faltas</th>
+        <th class="text-center">Faltas Justificadas</th>
+      </div>
+      </tr>
+    </thead>
+    <tbody id="tabela-alunos-body">
+      <?php if (empty($alunos_filtrados)): ?>
+        <tr>
+          <td colspan="6" class="text-center">Nenhum aluno encontrado para esta turma.</td>
+        </tr>
+      <?php else: ?>
+        <?php foreach ($alunos_filtrados as $aluno): ?>
           <tr>
-            <th width="40"><input type="checkbox" id="check-all-table"></th>
-            <th>Nome do Aluno</th>
-            <th>Turma</th>
-            <th class="text-center">Total de Faltas</th>
-            <th class="text-center">Estado</th>
+            <td><input type="checkbox" checked></td>
+            <td><?php echo htmlspecialchars($aluno['nome']); ?></td>
+            <td><?php echo htmlspecialchars($aluno['turma']); ?></td>
+            <td class="text-center highlight-red"><?php echo $aluno['faltas']; ?></td>
+            <td class="text-center"><?php echo $aluno['justificadas']; ?></td>
           </tr>
-        </thead>
-        <tbody id="tabela-alunos-body">
-          <?php if (empty($alunos_filtrados)): ?>
-            <tr>
-              <td colspan="5" class="text-center">Nenhum aluno encontrado para esta turma.</td>
-            </tr>
-          <?php else: ?>
-            <?php foreach ($alunos_filtrados as $aluno): ?>
-              <tr>
-                <td><input type="checkbox" checked></td>
-                <td><?php echo htmlspecialchars($aluno['nome']); ?></td>
-                <td><?php echo htmlspecialchars($aluno['turma']); ?></td>
-                <td class="text-center highlight-red"><?php echo $aluno['faltas']; ?></td>
-                <td class="text-center"><span class="badge">ALERTA</span></td>
-              </tr>
-            <?php endforeach; ?>
-          <?php endif; ?>
-        </tbody>
-      </table>
-    </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
+    </tbody>
+  </table>
+</div>
 
   </div>
 
@@ -152,19 +170,28 @@ $alunos_filtrados = array_filter($alunos, function($aluno) use ($turma_seleciona
     <button class="btn-outline" onclick="history.back()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline>
-      </svg>
-      VOLTAR PARA INÍCIO
+      </svg> VOLTAR PARA INÍCIO
     </button>
 
     <div class="right-actions">
-      <button class="btn-outline" id="btn-download">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="7 10 12 15 17 10"></polyline>
-          <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
-        BAIXAR LISTA COMPLETA
-      </button>
+<div class="download-group" style="display: inline-flex; gap: 8px;">
+  <button type="button" class="btn-outline" onclick="baixarLista('excel')">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+      <polyline points="7 10 12 15 17 10"></polyline>
+      <line x1="12" y1="15" x2="12" y2="3"></line>
+    </svg>
+    EXCEL
+  </button>
+
+  <button type="button" class="btn-outline" onclick="baixarLista('pdf')">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+      <polyline points="14 2 14 8 20 8"></polyline>
+    </svg>
+    PDF
+  </button>
+</div>
 
       <button class="btn-primary" id="btn-enviar-email">
         <div class="btn-icon">
@@ -183,19 +210,6 @@ $alunos_filtrados = array_filter($alunos, function($aluno) use ($turma_seleciona
 
 </main>
 
-  <script>
-    let limite = 100;
-
-    function alterarLimite(valor) {
-      limite += valor;
-
-      if (limite < 0) {
-        limite = 0;
-      }
-
-      document.getElementById("limite").textContent = limite;
-    }
-  </script>
-
 </body>
+<script src="dados.js"></script>
 </html>
