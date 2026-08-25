@@ -132,3 +132,4 @@ function gerarPDF() {
       document.body.removeChild(containerTemp);
     });
 }
+
