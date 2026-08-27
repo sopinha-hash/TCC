@@ -2,7 +2,6 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Usa __DIR__ para pegar o caminho exato do projeto no seu computador
 require __DIR__ . '/PHPMailer/Exception.php';
 require __DIR__ . '/PHPMailer/PHPMailer.php';
 require __DIR__ . '/PHPMailer/SMTP.php';
@@ -23,16 +22,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mail = new PHPMailer(true);
 
     try {
-        // Configuração do Servidor SMTP (Exemplo: Gmail)
-//EMAIL REMETENTE. MUDAR FUTURAMENTE PARA UM EMAIL DA ESCOLA
+        // Configurações SMTP
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'sophia.faria@aluno.edu.es.gov.br';    
-        $mail->Password   = 'pwgw faoe tedh qmcz';        
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = 587;
-        $mail->CharSet    = 'UTF-8';
+        $mail->Username   = 'sophia.faria@aluno.edu.es.gov.br';       
+        $mail->Password   = 'pwgw faoe tedh qmcz';           
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
+        $mail->Port       = 587;                          
+        $mail->Timeout    = 15;
+
+        // Ignora falhas na verificação do certificado (necessário em redes escolares/locais)
+        $mail->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer'       => false,
+                'verify_peer_name'  => false,
+                'allow_self_signed' => true
+            )
+        );
 
         // Remetente e Destinatário
         $mail->setFrom('sophia.faria@aluno.edu.es.gov.br', 'Sistema Escolar');
@@ -53,6 +60,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mail->isHTML(true);
         $mail->Subject = $assunto;
         $mail->Body    = $corpoHtml;
+
+        // Anexa o arquivo
+        if (isset($_FILES['anexo']) && $_FILES['anexo']['error'] === UPLOAD_ERR_OK) {
+            $caminhoTemp = $_FILES['anexo']['tmp_name'];
+            $nomeOriginal = $_FILES['anexo']['name'];
+            $mail->addAttachment($caminhoTemp, $nomeOriginal);
+        }
 
         $mail->send();
         echo "E-mail enviado com sucesso para " . $emailDestino . "!";
