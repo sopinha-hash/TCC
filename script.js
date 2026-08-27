@@ -36,12 +36,10 @@ if (inputPesquisa) {
 
 // --- FUNÇÕES DO MODAL/POP-UP ---
 function abrirModalEmail() {
-  atualizarContadorAlunos(); // Atualiza a contagem antes de abrir
+  atualizarContadorAlunos();
   const modal = document.getElementById('modal-email');
   if (modal) {
     modal.style.setProperty('display', 'flex', 'important');
-  } else {
-    console.error("Erro: Elemento '#modal-email' não foi encontrado no HTML.");
   }
 }
 
@@ -50,26 +48,54 @@ function fecharModalEmail() {
   if (modal) {
     modal.style.setProperty('display', 'none', 'important');
   }
+
+  // Reset do Formulário (Limpa campos de texto, e-mail e textarea)
+  const form = document.getElementById('form-enviar-email');
+  if (form) {
+    form.reset();
+  }
+
+  // Limpa o arquivo anexo
+  const campoAnexo = document.getElementById('email-anexo');
+  if (campoAnexo) {
+    campoAnexo.value = '';
+  }
+
+  // Limpa o nome do arquivo que fica visível na tela
+  const spanArquivo = document.getElementById('nome-arquivo-anexo');
+  if (spanArquivo) {
+    spanArquivo.textContent = '';
+  }
 }
 
 function enviarEmailAlerta(event) {
   event.preventDefault();
 
-  const emailDestino = document.getElementById('email-destino')?.value || '';
-  const assunto = document.getElementById('email-assunto')?.value || '';
-  const mensagem = document.getElementById('email-mensagem')?.value || '';
+  const formData = new FormData();
+  formData.append('email', document.getElementById('email-destino').value);
+  formData.append('assunto', document.getElementById('email-assunto').value);
+  formData.append('mensagem', document.getElementById('email-mensagem').value);
 
-  // Coleta os nomes dos alunos que estão com o checkbox MARCADO
-  const alunosMarcados = [];
-  const linhas = document.querySelectorAll('#tabela-alunos-body tr');
+  // Captura o input do arquivo
+  const campoAnexo = document.getElementById('email-anexo');
+  if (campoAnexo && campoAnexo.files[0]) {
+    formData.append('anexo', campoAnexo.files[0]);
+  }
 
-  linhas.forEach(linha => {
-    const chk = linha.querySelector('input[type="checkbox"]');
-    if (chk && chk.checked && linha.style.display !== 'none') {
-      const nome = linha.children[1]?.textContent.trim();
-      if (nome) alunosMarcados.push(nome);
-    }
+  fetch('email.php', {
+    method: 'POST',
+    body: formData // Importante: não definir headers manuais de Content-Type aqui
+  })
+  .then(response => response.text())
+  .then(resposta => {
+    alert(resposta);
+    fecharModalEmail();
+  })
+  .catch(error => {
+    alert('Erro ao enviar e-mail.');
+    console.error(error);
   });
+}
 
   // Envia via AJAX incluindo a lista de alunos selecionados
   fetch('email.php', {
@@ -86,7 +112,7 @@ function enviarEmailAlerta(event) {
     alert('Erro ao enviar e-mail.');
     console.error(error);
   });
-}
+
 
 // --- FUNÇÃO PARA BAIXAR EXCEL ---
 function baixarLista(formato) { 
