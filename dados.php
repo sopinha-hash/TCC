@@ -77,10 +77,9 @@ $alunos_filtrados = array_filter($alunos, function($aluno) use ($turma_seleciona
 </head>
 
 <body>
-<img class="logo" src="../TCC26/img/brasao.png" alt="Brasão ASN">
-
 <header class="header">
   <div class="header-content">
+    <img class="logo" src="img/brasao.png" alt="Brasão ASN">
     <div class="header-title">
       Sistema de Alerta<br>
       de <span>Faltas Escolares</span>
@@ -231,7 +230,7 @@ $alunos_filtrados = array_filter($alunos, function($aluno) use ($turma_seleciona
 
 </main>
 
-<script src="dados.js"></script>
+<script src="script.js"></script>
 <?php include 'alerta.php'; ?>
 </div>
 </body>
