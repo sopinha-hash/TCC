@@ -1,4 +1,4 @@
 <?php
-    header("Location: dados.php");
+    header("Location: dashboard.php");
     exit;
 ?>
